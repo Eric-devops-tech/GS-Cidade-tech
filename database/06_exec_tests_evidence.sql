@@ -3,6 +3,10 @@ DECLARE
     v_veredito  VARCHAR2(50);
     v_total     NUMBER;
 BEGIN
+    -- Reset de segurança da Consulta 2 (permite re-execuções sem erro)
+    DELETE FROM TB_CT_VOTO WHERE id_consulta = 2 AND id_usuario = 6;
+    UPDATE TB_CT_CONSULTA SET status = 'ABERTA' WHERE id_consulta = 2;
+
     DBMS_OUTPUT.PUT_LINE('--- TESTE 1: REGISTRO DE VOTO VALIDO ---');
     -- Morador Beatriz vota FAVOR na consulta 2 (Iluminação LED Bela Vista - status ABERTA)
     PRC_REGISTRAR_VOTO(
@@ -48,3 +52,4 @@ BEGIN
         p_total_apurado   => v_total
     );
 END;
+/
