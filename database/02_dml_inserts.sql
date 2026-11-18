@@ -1,3 +1,5 @@
+SET DEFINE OFF;
+
 -- 1. Limpeza de registros prévios
 DELETE FROM TB_CT_VOTO;
 DELETE FROM TB_CT_CONSULTA;
@@ -49,28 +51,28 @@ INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
 VALUES ('Saúde Comunitária', 'Melhorias em UBS e campanhas de saúde preventiva.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Meio Ambiente & Sustentabilidade', 'Hortas comunitárias, reciclagem e praças verdes.', 'S');
+VALUES ('Meio Ambiente e Sustentabilidade', 'Hortas comunitárias, reciclagem e praças verdes.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Iluminação & Zeladoria', 'Lâmpadas LED, descarte de entulho e limpeza de bueiros.', 'S');
+VALUES ('Iluminação e Zeladoria', 'Lâmpadas LED, descarte de entulho e limpeza de bueiros.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
 VALUES ('Segurança Cidadã', 'Câmeras integradas, rondas e iluminação de pontos escuros.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Cultura & Lazer', 'Ocupação de espaços públicos e feiras locais.', 'S');
+VALUES ('Cultura e Lazer', 'Ocupação de espaços públicos e feiras locais.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Educação & Capacitação', 'Inclusão digital, cursos e reforço escolar.', 'S');
+VALUES ('Educação e Capacitação', 'Inclusão digital, cursos e reforço escolar.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Acessibilidade & Inclusão', 'Rampas de acesso e piso tátil para pessoas com deficiência.', 'S');
+VALUES ('Acessibilidade e Inclusão', 'Rampas de acesso e piso tátil para pessoas com deficiência.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
 VALUES ('Esporte Comunitário', 'Revitalização de quadras e academias ao ar livre.', 'S');
 
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo)
-VALUES ('Habitação & Regularização', 'Orientação jurídica e apoio em regularização fundiária.', 'S');
+VALUES ('Habitação e Regularização', 'Orientação jurídica e apoio em regularização fundiária.', 'S');
 
 -- 4. Carga de Consultas Públicas
 INSERT INTO TB_CT_CONSULTA (id_tema, id_gestor, titulo, descricao, bairro_alvo, status, data_abertura, data_fechamento, total_votos, resultado_apuracao)

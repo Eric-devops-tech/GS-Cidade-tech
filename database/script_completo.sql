@@ -92,14 +92,14 @@ VALUES ('Camila Pires Vieira', 'camila.pires@email.com', '$2a$12$K1dZ...morador1
 -- 7. Carga de Temas
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Mobilidade Urbana', 'Ciclovias e transporte publico.', 'S');
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Saúde Comunitária', 'Melhorias em UBS e saude preventiva.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Meio Ambiente & Sustentabilidade', 'Hortas comunitarias e reciclagem.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Iluminação & Zeladoria', 'Lampadas LED e zeladoria urbana.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Meio Ambiente e Sustentabilidade', 'Hortas comunitarias e reciclagem.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Iluminação e Zeladoria', 'Lampadas LED e zeladoria urbana.', 'S');
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Segurança Cidadã', 'Cameras e rondas comunitarias.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Cultura & Lazer', 'Ocupacao de pracas e feiras locais.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Educação & Capacitação', 'Polos de inclusao digital.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Acessibilidade & Inclusão', 'Rampas e calcadas acessiveis.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Cultura e Lazer', 'Ocupacao de pracas e feiras locais.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Educação e Capacitação', 'Polos de inclusao digital.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Acessibilidade e Inclusão', 'Rampas e calcadas acessiveis.', 'S');
 INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Esporte Comunitário', 'Quadras poliesportivas.', 'S');
-INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Habitação & Regularização', 'Orientacao e apoio habitacional.', 'S');
+INSERT INTO TB_CT_TEMA (nome_tema, descricao, status_ativo) VALUES ('Habitação e Regularização', 'Orientacao e apoio habitacional.', 'S');
 
 -- 8. Carga de Consultas Públicas
 INSERT INTO TB_CT_CONSULTA (id_tema, id_gestor, titulo, descricao, bairro_alvo, status, data_abertura, data_fechamento, total_votos, resultado_apuracao)
