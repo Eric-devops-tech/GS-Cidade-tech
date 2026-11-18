@@ -1,39 +1,25 @@
--- ============================================================================
--- PROJETO: Cidade Tech - Consultas e Acompanhamento de Decisões Comunitárias
--- DISCIPLINA: Mastering Relational and Non-Relational Database
--- ENTREGA: 03_plsql_anonymous_block.sql
--- DESCRIÇÃO: Bloco Anônimo PL/SQL com variáveis, SELECT INTO, DBMS_OUTPUT 
---            e estrutura de decisão IF/ELSIF/ELSE para regra de negócio.
--- AUTORES: Kayque Duarte (RM 567980), Eric Maciel (RM 567398), Gabriel Correa Souza (RM 567903)
--- TURMA: 2TDSPB
--- ============================================================================
-
-SET SERVEROUTPUT ON SIZE UNLIMITED;
-
 DECLARE
-    -- Identificador da consulta a ser avaliada
+    -- Declaração de variáveis para receber os dados via SELECT INTO
     v_id_consulta           TB_CT_CONSULTA.id_consulta%TYPE := 1;
-    
-    -- Variáveis para SELECT INTO dos dados da consulta
     v_titulo                TB_CT_CONSULTA.titulo%TYPE;
     v_bairro                TB_CT_CONSULTA.bairro_alvo%TYPE;
     v_status                TB_CT_CONSULTA.status%TYPE;
     v_nome_tema             TB_CT_TEMA.nome_tema%TYPE;
     v_nome_gestor           TB_CT_USUARIO.nome%TYPE;
     
-    -- Variáveis de apuração e contagem
+    -- Variáveis de apuração de votos
     v_total_votos           NUMBER := 0;
     v_votos_favor           NUMBER := 0;
     v_votos_contra          NUMBER := 0;
     v_votos_abstencao       NUMBER := 0;
     v_perc_favor            NUMBER(5,2) := 0;
     
-    -- Classificação pela regra de negócio
+    -- Variáveis para a regra de negócio
     v_classificacao_parecer VARCHAR2(100);
     v_acao_recomendada      VARCHAR2(150);
 
 BEGIN
-    -- 1. Recuperação das informações descritivas da consulta via SELECT INTO
+    -- 1. Busca os dados da consulta, tema e gestor responsável via SELECT INTO
     SELECT c.titulo,
            c.bairro_alvo,
            c.status,
@@ -49,11 +35,11 @@ BEGIN
       JOIN TB_CT_USUARIO u ON c.id_gestor = u.id_usuario
      WHERE c.id_consulta = v_id_consulta;
 
-    -- 2. Totalização detalhada das opções de voto
-    SELECT COUNT(*)                                                 AS total,
-           NVL(SUM(CASE WHEN opcao_voto = 'FAVOR' THEN 1 ELSE 0 END), 0) AS favor,
-           NVL(SUM(CASE WHEN opcao_voto = 'CONTRA' THEN 1 ELSE 0 END), 0) AS contra,
-           NVL(SUM(CASE WHEN opcao_voto = 'ABSTENCAO' THEN 1 ELSE 0 END), 0) AS abstencao
+    -- 2. Totalização dos votos registrados na consulta
+    SELECT COUNT(*),
+           NVL(SUM(CASE WHEN opcao_voto = 'FAVOR' THEN 1 ELSE 0 END), 0),
+           NVL(SUM(CASE WHEN opcao_voto = 'CONTRA' THEN 1 ELSE 0 END), 0),
+           NVL(SUM(CASE WHEN opcao_voto = 'ABSTENCAO' THEN 1 ELSE 0 END), 0)
       INTO v_total_votos,
            v_votos_favor,
            v_votos_contra,
@@ -61,58 +47,45 @@ BEGIN
       FROM TB_CT_VOTO
      WHERE id_consulta = v_id_consulta;
 
-    -- Cálculo do percentual favorável (quando há votos)
     IF v_total_votos > 0 THEN
         v_perc_favor := ROUND((v_votos_favor / v_total_votos) * 100, 2);
     ELSE
         v_perc_favor := 0;
     END IF;
 
-    -- 3. Regra de Negócio: Decisão com IF / ELSIF / ELSE
-    -- Classificação da adesão comunitária e direcionamento para a prefeitura/associação
+    -- 3. Regra de Negócio com IF / ELSIF / ELSE: Classificação de aprovação popular
     IF v_total_votos = 0 THEN
-        v_classificacao_parecer := 'SEM PARTICIPAÇÃO POPULAR SUFICIENTE';
-        v_acao_recomendada      := 'Ampliar canais de divulgação no bairro antes de prosseguir.';
+        v_classificacao_parecer := 'SEM PARTICIPACAO POPULAR SUFICIENTE';
+        v_acao_recomendada      := 'Ampliar divulgacao no bairro antes de prosseguir.';
     ELSIF v_perc_favor >= 70.00 THEN
-        v_classificacao_parecer := 'APROVADA COM AMPLA ADESÃO POPULAR';
-        v_acao_recomendada      := 'Encaminhar com prioridade máxima para inclusão no orçamento do bairro.';
+        v_classificacao_parecer := 'APROVADA COM AMPLA ADESAO POPULAR';
+        v_acao_recomendada      := 'Encaminhar com prioridade para inclusao no orcamento do bairro.';
     ELSIF v_perc_favor >= 50.00 THEN
         v_classificacao_parecer := 'APROVADA POR MAIORIA SIMPLES';
-        v_acao_recomendada      := 'Apto para planejamento e análise de viabilidade técnica municipal.';
+        v_acao_recomendada      := 'Apto para planejamento e analise de viabilidade tecnica.';
     ELSIF v_votos_contra > v_votos_favor THEN
         v_classificacao_parecer := 'REJEITADA PELA COMUNIDADE';
-        v_acao_recomendada      := 'Arquivar proposta ou remodelar o escopo ouvindo os moradores.';
+        v_acao_recomendada      := 'Arquivar proposta ou remodelar ouvindo os moradores.';
     ELSE
-        v_classificacao_parecer := 'DIVISÃO DE OPINIÕES / EMPATE TÉCNICO';
-        v_acao_recomendada      := 'Convocar audiência pública presencial para alinhamento.';
+        v_classificacao_parecer := 'DIVISAO DE OPINIOES / EMPATE TECNICO';
+        v_acao_recomendada      := 'Convocar audiencia publica presencial para alinhamento.';
     END IF;
 
     -- 4. Exibição dos resultados formatados via DBMS_OUTPUT
     DBMS_OUTPUT.PUT_LINE('================================================================');
-    DBMS_OUTPUT.PUT_LINE('           PAINEL DE ANÁLISE DE CONSULTA - CIDADE TECH           ');
-    DBMS_OUTPUT.PUT_LINE('================================================================');
-    DBMS_OUTPUT.PUT_LINE('ID da Consulta      : ' || v_id_consulta);
-    DBMS_OUTPUT.PUT_LINE('Título da Proposta  : ' || v_titulo);
-    DBMS_OUTPUT.PUT_LINE('Tema Vinculado      : ' || v_nome_tema);
-    DBMS_OUTPUT.PUT_LINE('Bairro de Aplicação : ' || v_bairro);
-    DBMS_OUTPUT.PUT_LINE('Gestor Responsável  : ' || v_nome_gestor);
-    DBMS_OUTPUT.PUT_LINE('Status da Consulta  : ' || v_status);
-    DBMS_OUTPUT.PUT_LINE('----------------------------------------------------------------');
-    DBMS_OUTPUT.PUT_LINE('APURAÇÃO DOS VOTOS:');
-    DBMS_OUTPUT.PUT_LINE('  * Total de Votos Registrados : ' || v_total_votos);
-    DBMS_OUTPUT.PUT_LINE('  * Votos a Favor              : ' || v_votos_favor || ' (' || v_perc_favor || '%)');
-    DBMS_OUTPUT.PUT_LINE('  * Votos Contra               : ' || v_votos_contra);
-    DBMS_OUTPUT.PUT_LINE('  * Abstenções                 : ' || v_votos_abstencao);
-    DBMS_OUTPUT.PUT_LINE('----------------------------------------------------------------');
-    DBMS_OUTPUT.PUT_LINE('PARECER DA REGRA DE NEGÓCIO:');
-    DBMS_OUTPUT.PUT_LINE('  * Classificação Oficial : ' || v_classificacao_parecer);
-    DBMS_OUTPUT.PUT_LINE('  * Próximo Passo Sugerido: ' || v_acao_recomendada);
+    DBMS_OUTPUT.PUT_LINE('PAINEL DE ANALISE DE CONSULTA - CIDADE TECH');
+    DBMS_OUTPUT.PUT_LINE('Consulta: #' || v_id_consulta || ' - ' || v_titulo);
+    DBMS_OUTPUT.PUT_LINE('Tema: ' || v_nome_tema || ' | Bairro: ' || v_bairro || ' | Status: ' || v_status);
+    DBMS_OUTPUT.PUT_LINE('Gestor Responsavel: ' || v_nome_gestor);
+    DBMS_OUTPUT.PUT_LINE('Votos: Total=' || v_total_votos || ' | Favor=' || v_votos_favor || ' (' || v_perc_favor || '%) | Contra=' || v_votos_contra || ' | Abstencao=' || v_votos_abstencao);
+    DBMS_OUTPUT.PUT_LINE('Classificacao: ' || v_classificacao_parecer);
+    DBMS_OUTPUT.PUT_LINE('Proximo Passo: ' || v_acao_recomendada);
     DBMS_OUTPUT.PUT_LINE('================================================================');
 
+-- 5. Tratamento de exceções
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('ERRO: Nenhuma consulta foi encontrada para o ID ' || v_id_consulta);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('ERRO INESPERADO (' || SQLCODE || '): ' || SQLERRM);
 END;
-/
