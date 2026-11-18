@@ -1,0 +1,16 @@
+# Sistema / IDEs
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+Thumbs.db
+[Dd]esktop.ini
+.DS_Store
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+scratch/
