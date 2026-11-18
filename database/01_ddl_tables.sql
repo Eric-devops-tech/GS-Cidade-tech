@@ -8,29 +8,11 @@
 -- ============================================================================
 
 -- Limpeza preventiva de tabelas (ordem inversa de dependência)
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_VOTO CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_CONSULTA CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_TEMA CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_USUARIO CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
+-- (Caso esteja executando pela primeira vez e as tabelas ainda não existam, o Oracle apenas indicará que a tabela não foi encontrada)
+DROP TABLE TB_CT_VOTO CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_CONSULTA CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_TEMA CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_USUARIO CASCADE CONSTRAINTS;
 
 -- ----------------------------------------------------------------------------
 -- 1. TABELA DE USUÁRIOS (Cidadãos e Gestores Comunitários)

@@ -1,7 +1,6 @@
 -- ============================================================================
 -- PROJETO: Cidade Tech - Consultas e Acompanhamento de Decisões Comunitárias
 -- DISCIPLINA: Mastering Relational and Non-Relational Database
--- ENTREGA: script_completo.sql (ARQUIVO CONSOLIDADO DE EXECUÇÃO ÚNICA)
 -- AUTORES: Kayque Duarte (RM 567980), Eric Maciel (RM 567398), Gabriel Correa Souza (RM 567903)
 -- TURMA: 2TDSPB
 -- ============================================================================
@@ -18,30 +17,11 @@ PROMPT ========================================================================
 PROMPT PARTE 1: CRIAÇÃO DO MODELO RELACIONAL (DDL)
 PROMPT ========================================================================
 
--- Limpeza preventiva de tabelas
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_VOTO CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_CONSULTA CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_TEMA CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE TB_CT_USUARIO CASCADE CONSTRAINTS';
-EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF;
-END;
-/
+-- Limpeza preventiva de tabelas (ordem inversa de dependência)
+DROP TABLE TB_CT_VOTO CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_CONSULTA CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_TEMA CASCADE CONSTRAINTS;
+DROP TABLE TB_CT_USUARIO CASCADE CONSTRAINTS;
 
 -- 1. Tabela de Usuários
 CREATE TABLE TB_CT_USUARIO (
